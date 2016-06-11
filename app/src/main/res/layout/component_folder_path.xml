@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="horizontal"
+    android:paddingTop="8dp"
+    android:layout_width="wrap_content"
+    android:id="@+id/folder_container_linearlayout"
+    android:layout_height="wrap_content">
+<TextView
+    android:id="@+id/folder_name_textview"
+    tools:text = "music"
+    android:gravity="center"
+    android:textSize="12sp"
+    android:textStyle="bold"
+    android:paddingRight="5dp"
+    android:paddingLeft="5dp"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent" />
+    <ImageView
+        android:src="@drawable/ic_arrow_right_24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent" />
+</LinearLayout>
