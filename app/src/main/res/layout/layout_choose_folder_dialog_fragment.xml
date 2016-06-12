@@ -5,16 +5,22 @@
     android:orientation="vertical">
 
     <TextView
+        android:background="@android:color/holo_blue_dark"
         android:layout_width="match_parent"
         android:layout_height="56dp"
         android:gravity="center"
+        android:textColor="@android:color/white"
         android:text="Please choose folder"
         android:textSize="20sp" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/folder_path_list_recyclerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="36dp" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="#c0c0c0"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/current_folder_fils_recyclerview"

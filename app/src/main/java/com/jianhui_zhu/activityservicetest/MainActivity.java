@@ -18,6 +18,7 @@ public class MainActivity extends AppCompatActivity{
         setContentView(R.layout.activity_main);
         Button startButton = (Button)findViewById(R.id.play);
         Button stopButton = (Button)findViewById(R.id.pause);
+        Button dialogButton = (Button)findViewById(R.id.get_path_dialog);
         Intent intent = new Intent(MainActivity.this,MusicService.class);
         bindService(intent,sc, Context.BIND_AUTO_CREATE);
         startService(intent);
@@ -40,7 +41,14 @@ public class MainActivity extends AppCompatActivity{
                 }
             });
         }
-
+        if(dialogButton!=null){
+            dialogButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    new ChooseMusicFolderDialogFragment().show(getFragmentManager(),ChooseMusicFolderDialogFragment.class.getName());
+                }
+            });
+        }
     }
     private ServiceConnection sc = new ServiceConnection() {
         @Override

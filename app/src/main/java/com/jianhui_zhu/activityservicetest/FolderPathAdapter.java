@@ -61,7 +61,7 @@ public class FolderPathAdapter extends RecyclerView.Adapter<FolderPathAdapter.Fo
             container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    int position = getAdapterPosition();
+                    int position = getLayoutPosition();
                     if(position!=pathName.size()-1){
                         for (int i = position+1; i < pathName.size(); i++) {
                             pathName.remove(i);

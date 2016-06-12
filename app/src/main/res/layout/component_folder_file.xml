@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/file_area"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
     android:paddingTop="8dp"
@@ -20,11 +21,6 @@
         android:paddingLeft="8dp"
         android:layout_toRightOf="@+id/folder_ic"
         android:id="@+id/folder_name_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <RadioButton
-        android:layout_alignParentRight="true"
-        android:id="@+id/folder_select_radiobutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 </RelativeLayout>
