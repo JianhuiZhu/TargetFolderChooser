@@ -4,16 +4,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.io.File;
 import java.net.URLConnection;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
@@ -26,22 +24,31 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderItem
     public String getTargetFilePath() {
         return targetFilePath;
     }
-
+    public void changeFileList(File files){
+        File[] tempFiles = files.listFiles();
+        this.files.clear();
+        if(tempFiles!=null) {
+            for (File file :
+                    tempFiles) {
+                if(file.isDirectory()){
+                    this.files.add(file);
+                }
+                String mineType = URLConnection.guessContentTypeFromName(file.getName());
+                if(mineType!=null&&mineType.startsWith("audio")){
+                    this.files.add(file);
+                }
+            }
+        }
+        notifyDataSetChanged();
+    }
     private String targetFilePath;
     private List<File> files = new ArrayList<>();
     private ChangeFolderInterface folderInterface;
-    public FolderAdapter(List<File>files, ChangeFolderInterface changeFolderInterface){
+    public FolderAdapter(File file, ChangeFolderInterface changeFolderInterface){
         if(files!=null){
-            this.files.addAll(files);
+            changeFileList(file);
         }
         folderInterface = changeFolderInterface;
-    }
-    public void changeFileList(List<File> newFiles){
-        files.clear();
-        if(newFiles!=null){
-            files.addAll(newFiles);
-        }
-        notifyDataSetChanged();
     }
     @Override
     public FolderAdapter.FolderItem onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -54,13 +61,10 @@ public class FolderAdapter extends RecyclerView.Adapter<FolderAdapter.FolderItem
         File file = files.get(position);
         holder.folderNameTextView.setText(file.getName());
         if(file.isDirectory()){
+            holder.folderIcImageView.setImageResource(R.drawable.ic_folder_black_24dp);
         }else{
             String mineType = URLConnection.guessContentTypeFromName(file.getName());
-            if(mineType!=null&&mineType.startsWith("audio")){
                 holder.folderIcImageView.setImageResource(R.drawable.ic_audio_file_24dp);
-            }else{
-                holder.folderIcImageView.setImageResource(R.drawable.ic_file_24dp);
-            }
         }
     }
 

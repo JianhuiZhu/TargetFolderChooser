@@ -1,6 +1,7 @@
 package com.jianhui_zhu.activityservicetest;
 
 import android.app.DialogFragment;
+import android.app.Fragment;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
@@ -13,9 +14,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -32,6 +30,7 @@ public class ChooseMusicFolderDialogFragment extends DialogFragment implements C
     Button cancelButton;
     @Bind(R.id.ok_button)
     Button okButton;
+    ChangeFolderInterface activityInterface;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -45,31 +44,34 @@ public class ChooseMusicFolderDialogFragment extends DialogFragment implements C
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         File directory = Environment.getExternalStorageDirectory();
-        String path = directory.getAbsolutePath();
-        String [] paths = path.split("/|\\\\");
-        List<String> pathsList = new ArrayList<>();
-        pathsList.addAll(Arrays.asList(paths));
-        List<File> fileList = new ArrayList<>();
-        fileList.addAll(Arrays.asList(directory.listFiles()));
-        folderPathListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.HORIZONTAL,false));
+        folderPathListRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL,false));
         folderPathListRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        folderPathListRecyclerView.setAdapter(new FolderPathAdapter(pathsList,this));
-        currentFolderfilesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false));
+        folderPathListRecyclerView.setAdapter(new FolderPathAdapter(directory.getAbsolutePath(),this,getActivity()));
+        currentFolderfilesRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,false));
         currentFolderfilesRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        currentFolderfilesRecyclerView.setAdapter(new FolderAdapter(fileList,this));
+        currentFolderfilesRecyclerView.setAdapter(new FolderAdapter(directory,this));
+        okButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String path = ((FolderAdapter)currentFolderfilesRecyclerView.getAdapter()).getTargetFilePath();
+                activityInterface.changeFolderTo(path);
+                onDismiss(getDialog());
+            }
+        });
     }
 
     @Override
     public void changeFolderTo(String path) {
         File file = new File(path);
-        List<File> fileList = new ArrayList<>();
-        File[] tempFiles = file.listFiles();
-        fileList.addAll(Arrays.asList(tempFiles));
-        ((FolderAdapter)currentFolderfilesRecyclerView.getAdapter()).changeFileList(fileList);
-        String dir = file.getAbsolutePath();
-        String [] paths = dir.split("/|\\\\");
-        List<String> dirList = new ArrayList<>();
-        dirList.addAll(Arrays.asList(paths));
-        ((FolderPathAdapter)folderPathListRecyclerView.getAdapter()).changePathName(dirList);
+
+        ((FolderAdapter)currentFolderfilesRecyclerView.getAdapter()).changeFileList(file);
+        ((FolderPathAdapter)folderPathListRecyclerView.getAdapter()).changePathName(path,getActivity());
+    }
+
+    public static DialogFragment newInstance(ChangeFolderInterface interfaceActivity) {
+
+        DialogFragment fragment = new ChooseMusicFolderDialogFragment();
+        ((ChooseMusicFolderDialogFragment)fragment).activityInterface = interfaceActivity;
+        return fragment;
     }
 }
